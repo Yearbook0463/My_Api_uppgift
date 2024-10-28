@@ -13,13 +13,15 @@ struct ContentView: View {
     @State private var errorMessage: String = ""
     @State private var lyrics: String = ""
     @State private var isLoading: Bool = false
+    @State private var fontSize: CGFloat = 12
+    @State private var isEditing = false
     
     func loadLyrics() async {
         guard !artistName.isEmpty, !track.isEmpty else {
             errorMessage = "Please enter both artist and track names."
             return
         }
-        
+        lyrics = ""
         isLoading = true
         defer { isLoading = false }
         
@@ -70,8 +72,17 @@ struct ContentView: View {
                 ScrollView {
                     Text(lyrics)
                         .padding()
+                        .font(.custom("Helvetica Neue", size: fontSize))
                 }
                 .frame(maxHeight: 300)
+                Text("Text size")
+                Slider(
+                    value: $fontSize,
+                        in: 12...24,
+                        onEditingChanged: { editing in
+                            isEditing = editing
+                        }
+                ).padding(10)
             }
         }
         .padding()
